@@ -56,6 +56,9 @@ header nav{
 	height: 100%;
 }
 
+/* REVIEW: Why do we need to use both tag mane and class here? Class is enough.
+   There are more places like this below.
+*/
 ul.header_nav {
 	display: inline-block;
 	font-size: 13px;
