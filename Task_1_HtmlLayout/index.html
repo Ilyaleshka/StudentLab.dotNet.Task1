@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!-- REVIEW: If you onen site on phone it will be 980px in width. (You can try build-in Chrome emulator)
+	     There is a meta tag that lets you set browser width to device width
+	-->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Task 1</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+
+	<header>
+		<section class="header_section">
+			<h1 class="logo">SITE NAME</h1>
+			<nav>
+				<ul class="header_nav">
+					<li>HOME</li>
+					<li>ABOUT</li>
+					<li>SERVICES</li>
+					<li>PORTFOLIO</li>
+					<li>CONTACT</li>
+				</ul>
+			</nav>
+		</section>
+	</header>
+
+	<main>
+		<!--banner-->
+		<div class="banner">
+			<section class="banner_section">
+				<div class="banner_text">
+					<img class="bannercircle" src="images/bannercircle.png">
+					<p class="banner_text with_line">Clivuam tinc <img class="lineimage" src="images/line.png"> </p>
+					<p class="banner_text">Nunc dignissim risus id metus</p>
+					<p class="banner_linktext">http://wallpaperswide.com/</p>
+				</div>
+			</section>
+		</div>
+
+		<!--row 1-->
+		<!-- REVIEW: It's better to give semantic names for classes.
+			You can say nothing abot this section if you see 'advantages_row'
+			Names like 'hero_section', 'carousel_section', etc. will be better
+		-->
+		<div class="advantages_row">
+			<section class="advantages_section">
+
+				<div class="advantages_cell">
+					<img class="advantages_image" src="images/rocket.png">
+					<h1>Aliquam tincidunt</h1>
+					<p>Donec nec justo eget felis facilisis fermen- tum. Aliquam porttitor mauris sit amet orci. Aenean
+						dignissim pellentesq <span>=> more</span></p>
+				</div>
+
+				<div class="advantages_cell">
+					<img class="advantages_image" src="images/shield.png">
+					<h1>Cras ornare tristiqu</h1>
+					<p>Jonec nec justo eget felis facilisis fermen- tum. Aliquam porttitor mauris sit amet orci. Aenean
+						dignissim pellentesq <span>=> more</span></p>
+				</div>
+
+				<div class="advantages_cell">
+					<img class="advantages_image" src="images/fire_extinguisher.png">
+					<h1>Vivamus vestibulum</h1>
+					<p>Conec nec justo eget felis facilisis fermen- tum. Aliquam porttitor mauris sit amet orci. Aenean
+						dignissim pellentesq <span>=> more</span></p>
+				</div>
+
+			</section>
+		</div>
+
+		<!--row 2-->
+		<div class="some_facts_row">
+			<section class="some_facts_section">
+				<div class="some_facts_content">
+					<h1>Donec nec justo eget felis facilisis fermentum. Aliquam porttitor sit amet orci. Aenean
+						dignissim pellentesque felis</h1>
+					<hr>
+					<h2>Civamus vestibulum nulla nec ante</h2>
+					<hr>
+					<section class="some_facts_articles">
+
+						<div class="article">
+							<h1>Sed egestas anteet</h1>
+							<p>Eros pede semper est, vitae luctus metus libero eu augue. Morbi purus libero, faucibus
+								adipiscing, commodo quis, gravida id, est. Sed lectus. Praesent elementum hendrerit
+								tortor. Ultrices sagittis, mi neque euismod dui, eu pulvinar nunc sapien ornare nisl.
+							</p>
+							<button>More</button>
+						</div>
+
+						<div class="article">
+							<h1>Aenean egestas anteet </h1>
+							<p>Lorem pede semper est, vitae luctus metus libero eu augue. Morbi purus libero, faucibus
+								adipiscing, commodo quis, gravida id, est. Sed lectus. Praesent elementum hendrerit
+								tortor. Ultrices sagittis, mi neque euismod dui, eu pulvinar nc sapien ornare nisl.</p>
+							<button>More</button>
+						</div>
+
+					</section>
+				</div>
+				<img class="some_facts_image" src="images/row2circle.png">
+			</section>
+		</div>
+
+		<!--row 3-->
+		<div class="subscribe_row">
+			<section class="subscribe_section">
+
+				<div class="subscribe_quote">
+					<img class="person_image" src="images/person.png">
+					<h1>Donec nec justo eget</h1>
+					<p>“ Ede semper est, vitae luctus metus libero eu augue. Morb sipo ipiscing, commodo quis, gravida
+						...” <span>- Kohn Doe / company name</span></p>
+				</div>
+
+				<div class="subscribe_inputform">
+					<h1>Morbi vitae luctus</h1>
+					<input type="text" name="" placeholder="enter your email id here ...">
+					<button>SUBSCRIBE<img class="button_arrow" src="images/arrow.png"></button>
+				</div>
+
+			</section>
+		</div>
+
+		<!--row 4-->
+		<div class="contact_us_row">
+			<section class="contact_us_section">
+
+				<section class="contact_us_column moreinfo">
+					<h1 class="contact_us_column_header">Aliquam tincidunt</h1>
+					<div class="moreinfo_content">
+
+						<div>
+							<img src="images/face.png">
+							<p class="contact_us_column_text">Donec nec justo eget felis facilisis fermen- tum. Aliquam
+								porttitor<br><span>=> more</span></p>
+						</div>
+
+						<div>
+							<img src="images/cage.png">
+							<p class="contact_us_column_text">Donec nec justo eget felis facilisis fermen- tum. Aliquam
+								porttitor<br><span>=> more</span></p>
+						</div>
+
+						<div>
+							<img src="images/bird.png">
+							<p class="contact_us_column_text">Donec nec justo eget felis facilisis fermen- tum. Aliquam
+								porttitor<br><span>=> more</span></p>
+						</div>
+
+					</div>
+				</section>
+
+				<section class="contact_us_column requestform">
+					<h1 class="contact_us_column_header">Nunc dignissim risu</h1>
+					<div class="requestform_content">
+						<p class="contact_us_column_text">Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae
+							luctus metus liber</p>
+						<input type="text" name="" placeholder="name ...">
+						<br>
+						<input type="text" name="" placeholder="email ...">
+						<br>
+						<textarea placeholder="your query ..."></textarea>
+						<br>
+						<button>SEND<img class="button_arrow" src="images/arrow.png"></button>
+					</div>
+				</section>
+
+				<section class="contact_us_column contacts">
+					<h1 class="contact_us_column_header">Aliquam tincidunt</h1>
+					<div class="contacts_content">
+						<div>
+							<img src="images/house.png">
+							<h2>Address</h2>
+							<p class="contact_us_column_text">some block, steet number, city name, country</p>
+						</div>
+						<div>
+							<img src="images/phone.png">
+							<h2>Phone</h2>
+							<p class="contact_us_column_text">(000) 777 777 7777 <br> (000) 888 888 8888</p>
+						</div>
+						<div>
+							<img src="images/mail.png">
+							<h2>Email us</h2>
+							<p class="contact_us_column_text">info@siteneme.com <br>sales@sitename.com
+								<br>company@sitename.com</p>
+						</div>
+					</div>
+				</section>
+
+			</section>
+		</div>
+	</main>
+
+	<footer>
+		<section class="footer_section">
+			<nav>
+				<ul class="footer_nav">
+					<li>Home</li>
+					<li>About</li>
+					<li>Services</li>
+					<li>Portfolio</li>
+					<li>Contact</li>
+				</ul>
+			</nav>
+			<p><span class="orange">Designed by: www.alltemplateneeds.com /</span> Images from: www.wallpaperswide.com /
+				Copyright(c) website name.</p>
+			<div class="social_links">
+				<img src="images/facebook.png">
+				<img src="images/twitter.png">
+				<img src="images/instagram.png">
+			</div>
+		</section>
+	</footer>
+
+</body>
+<html>
