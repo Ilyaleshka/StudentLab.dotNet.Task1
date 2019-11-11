@@ -325,6 +325,7 @@ for (let i = 0; i < dateTestArgs.length; i++) {
 
 
 
+//------------------------------------------------------------------------------
 
 
 
@@ -337,6 +338,7 @@ for (let i = 0; i < dateTestArgs.length; i++) {
 “перенос по символу”, “перенос по предложению”, 
 “переносов нет” - опционально).
  */
+
 
 function splice(sourceString, start, delCount, newSubStr) {
     return sourceString.slice(0, start) + newSubStr + sourceString.slice(start + Math.abs(delCount));
@@ -531,6 +533,8 @@ console.log("symbol:");
 console.log(sentenceFormat(str));
 */
 
+
+//------------------------------------------------------------------------------
 /*
 4.	String calculator
 Разработать объект содержащий набор методов для выполнения функций 
@@ -623,7 +627,7 @@ function getDifference(num1, num2, floatFormat = false) {
     return var1 - var2;
 }
 
-//console.log(getSum("100000.5", "0.5", true));
+//------------------------------------------------------------------------------
 
 function BubbleSort(sourceArray) {
     if ((!sourceArray.constructor === Array) && (sourceArray.length == 0))
@@ -644,51 +648,6 @@ function BubbleSort(sourceArray) {
                 end = false;
             }
         }
-    }
-
-    return sourceArray;
-}
-
-function BubbleSort(sourceArray) {
-    if ((!sourceArray.constructor === Array) && (sourceArray.length == 0))
-        return "argument isn't array";
-
-    let end = false;
-    for (let i = 0; i < sourceArray.length; i++) {
-        if (end)
-            break;
-
-        end = true;
-
-        for (let j = 0; j < (sourceArray.length - 1) - i; j++) {
-            if (sourceArray[j] < sourceArray[j + 1]) {
-                let buf = sourceArray[j];
-                sourceArray[j] = sourceArray[j + 1];
-                sourceArray[j + 1] = buf;
-                end = false;
-            }
-        }
-    }
-
-    return sourceArray;
-}
-
-function SelectionSort(sourceArray) {
-    if ((!sourceArray.constructor === Array) && (sourceArray.length == 0))
-        throw "argument isn't array";
-
-    for (let i = 0; i < sourceArray.length; i++) {
-        let max = sourceArray[i];
-        let index = i;
-        for (let j = i + 1; j < sourceArray.length; j++) {
-            if (sourceArray[j] > max) {
-                max = sourceArray[j];
-                index = j;
-            }
-        }
-        let buf = sourceArray[i];
-        sourceArray[i] = sourceArray[index];
-        sourceArray[index] = buf;
     }
 
     return sourceArray;
@@ -748,90 +707,64 @@ function QuickSort(sourceArray, left, right) {
     return sourceArray;
 }
 
-function QuickSort(sourceArray, left, right) {
-    let l = left;
-    let r = right;
-
-    if (r - l <= 1) return;
-
-    let mid = sourceArray[Math.ceil(l + (r - l) / 2)];
-    let ll = l,
-        rr = r - 1;
-
-    while (ll <= rr) {
-        while (sourceArray[ll] > mid) ll++;
-        while (sourceArray[rr] < mid) rr--;
-        if (ll <= rr) {
-            let buf = sourceArray[ll];
-            sourceArray[ll] = sourceArray[rr];
-            sourceArray[rr] = buf;
-            ll++;
-            rr--;
-        }
-    }
-    if (l < rr) {
-        QuickSort(sourceArray, l, rr + 1);
-    }
-    if (ll < r) {
-        QuickSort(sourceArray, ll, r);
-    }
-
-    return sourceArray;
-}
-
-function gShellSort(sourceArray) {
-    let l = 0;
-    let r = sourceArray.length - 1;
-    let sz = sourceArray.length;
-    let step = sz / 2;
-    while (step >= 1) {
-        for (let i = l + step; i < r; i++) {
-            let j = i;
-            let diff = Math.ceil(j - step);
-            while (diff >= l && sourceArray[diff] > sourceArray[j]) {
-                let buf = sourceArray[diff];
-                sourceArray[j] = sourceArray[diff];
-                sourceArray[diff] = buf;
-                j = diff;
-                diff = Math.ceil(j - step);
-            }
-        }
-        step /= 2;
-    }
-    return sourceArray;
-}
-
 function ShellSort(sourceArray) // * ∆k = (b∆k−1)/2  ∆0 = N
 {
     let step, i, j, tmp;
     let size = sourceArray.length;
-    // Выбор шага
-    for (step = Math.round(size / 1.7); step > 1; step = Math.round(step / 1.7)) {
-        // Перечисление элементов, которые сортируются на определённом шаге
+    for (step = Math.floor(size / 1.7); step >= 1; step = Math.floor(step / 1.7)) {
         for (i = step; i < size; i++) {
             let temp = sourceArray[i];
-            // Перестановка элементов внутри подсписка, пока i-тый не будет отсортирован
-            for (j = i; (j >= step ) && (temp < sourceArray[j - step]); j -= step) {
+            for (j = i;
+                (j >= step) && (temp > sourceArray[j - step]); j -= step) {
                 sourceArray[j] = sourceArray[j - step];
             }
             sourceArray[j] = temp;
         }
     }
-
     return sourceArray;
 }
 
+//------------------------------------------------------------------------------
 
-let arr = [0, 5, 7, -7, 5, -3, 8, 4, -10, 5, 3, 65, -4, 6, 0, -7, 6, 3, -8, -1, 5, 11, 3];
-console.log("bubble");
-console.log(BubbleSort(arr.slice()));
-console.log("selection");
-console.log(SelectionSort(arr.slice()));
-console.log("quick");
-console.log(QuickSort(arr.slice(), 0, arr.length));
-console.log("shell");
-console.log(ShellSort(arr.slice()));
-/*let t = BubbleSort(arr)
-for (i = 0; i < t.length; i++) {
-    console.log(t[i]);
-}*/
+let numbers = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F']
+
+function ConvertFromDecimalToOther(numArray, digit) {
+
+    let buf = numArray.join("");
+    let num = Number(numArray.join(""));
+    let number = "";
+    let ostatok;
+    while (num >= digit) {
+        ostatok = num % digit;
+        number = number + numbers[ostatok];
+        num = Math.floor(num / digit);
+    }
+    number = number + numbers[num];
+    let result = String(number).split("").reverse();
+    return result;
+}
+
+function ConvertToDecimal(num, digit) {
+    let numAsString  = num.join("");
+    let numAsNumber = Number(numAsString);
+    let res = 0;
+    for (let i = num.length - 1; i >= 0; --i) {
+        let j = num.length - 1 - i;
+        res += numbers.indexOf(num[i]) * Math.pow(digit,j);
+    }
+    let bufres = String(res);
+
+    return bufres.split("");
+}
+
+function ConvertFromToOther(num ,from, to) {
+    let decimal = ConvertToDecimal(num, from);
+    return ConvertFromDecimalToOther(decimal, to);
+}
+
+console.log(ConvertFromToOther(['1','2','3','1','2','4','2','4','3','4'] ,16,8));
+let test = ConvertFromToOther(['1','2','3','1','2','4','2','4','3','4'] ,16,8);
+for(let i = 0; i < test.length;i++)
+{
+    console.log(test[i]);
+}
