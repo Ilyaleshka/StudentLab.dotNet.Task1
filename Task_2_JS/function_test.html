@@ -21,6 +21,14 @@
             font-size: 12px;
             width: 95%;
         }
+
+        #text-formatter-date-input {
+            display: block;
+            margin: 0 auto;
+            width: 400px;
+            height: 200px;
+            resize: none;
+        }
     </style>
 </head>
 
@@ -35,9 +43,41 @@
         <fieldset>
             <legend>Date formatter</legend>
             <label>Date <input type="text" class="array-input" id="date-formatter-date-input" required></label>
-            <label>Format <input type="text" class="array-input" id="date-formatter-format-input" required placeholder="example DDMMYYYY"></label>
+            <label>Format <input type="text" class="array-input" id="date-formatter-format-input" required
+                    placeholder="example DDMMYYYY"></label>
             <button id="date-formatter-button">Procces</button>
             <p id="date-formatter-results"></p>
+        </fieldset>
+        <fieldset>
+            <legend>Text formatter</legend>
+            <textarea class="array-input" id="text-formatter-date-input" required></textarea>
+            <p><input name="wrap-type" type="radio" value="SYMBOL"> Symbol wrap</p>
+            <p><input name="wrap-type" type="radio" value="WORD" checked> Word wrap</p>
+            <p><input name="wrap-type" type="radio" value="SENTENCE"> Sentence wrap</p>
+            <label>Line lenght <input type="text" class="" id="text-formatter-line-length"></label>
+            <label>Lines count <input type="text" class="" id="text-formatter-line-count"></label>
+            <button id="text-formatter-button">Procces</button>
+            <p id="text-formatter-results"></p>
+        </fieldset>
+        <fieldset>
+            <legend>Calculator</legend>
+            <label>Arg 1 <input type="text" class="" id="calc-arg1-input"></label>
+            <label>Arg 2 <input type="text" class="" id="calc-arg2-input"></label>
+            <p><input name="calc-format" type="checkbox"> Float format</p>
+            <button id="calc-add-button">Addition</button>
+            <button id="calc-sub-button">Subtraction</button>
+            <button id="calc-mul-button">Multiplication</button>
+            <button id="calc-div-button">Division</button>
+            <p id="calc-results"></p>
+        </fieldset>
+        <fieldset>
+            <legend>Number system translator</legend>
+            <label>Number <input type="text" class="" id="translate-number-input"></label>
+            <br>
+            <label>from <input type="text" class="" id="translate-from-input"></label>
+            <label>to <input type="text" class="" id="translate-to-input"></label>
+            <button id="translate-button">Translate</button>
+            <p id="translate-results"></p>
         </fieldset>
     </div>
     <script type="text/javascript" src="JS_Tasks.js"></script>

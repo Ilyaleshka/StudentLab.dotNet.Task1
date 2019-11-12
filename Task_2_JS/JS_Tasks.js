@@ -344,8 +344,28 @@ function splice(sourceString, start, delCount, newSubStr) {
     return sourceString.slice(0, start) + newSubStr + sourceString.slice(start + Math.abs(delCount));
 }
 
-function getFormatText(sourceString, maxLineSize = 0, maxLineCount = 0, formatType = "NONE") {
-    symbolFormat(sourceString, maxLineSize, maxLineCount)
+const WORD_FORMAT = "WORD";
+const SYMBOL_FORMAT = "SYMBOL";
+const SENTENCE_FORMAT = "SENTENCE";
+
+function getFormatText(sourceString, maxLineSize = 0, maxLineCount = 0, formatType = "WORD") {
+
+    let result = "";
+    switch (formatType) {
+        case WORD_FORMAT:
+            result = wordFormat(sourceString, maxLineSize, maxLineCount)
+            break;
+
+        case SYMBOL_FORMAT:
+            result = symbolFormat(sourceString, maxLineSize, maxLineCount)
+            break;
+
+        case SENTENCE_FORMAT:
+            result = sentenceFormat(sourceString, maxLineSize, maxLineCount)
+            break;
+    }
+    return result;
+    //symbolFormat(sourceString, maxLineSize, maxLineCount)
 }
 
 function wordFormat(sourceString, maxLineSize = 0, maxLineCount = 0) {
@@ -553,7 +573,7 @@ function getAdditionResult(num1, num2, floatFormat = false) {
         var2 = parseFloat(num2);
     }
 
-    if (isNaN(num1) || isNaN(num2))
+    if (isNaN(var1) || isNaN(var2))
         throw "Invalid arguments";
 
     return var1 + var2;
@@ -570,7 +590,7 @@ function getMultiplicationResult(num1, num2, floatFormat = false) {
         var2 = parseFloat(num2);
     }
 
-    if (isNaN(num1) || isNaN(num2))
+    if (isNaN(var1) || isNaN(var2))
         throw "Invalid arguments";
 
     return var1 * var2;
@@ -587,45 +607,32 @@ function getSubtractionResult(num1, num2, floatFormat = false) {
         var2 = parseFloat(num2);
     }
 
-    if (isNaN(num1) || isNaN(num2))
-        throw "Invalid arguments";
-
-    return var1 + var2;
-}
-
-function getDivisionResul(num1, num2, floatFormat = false) {
-    let var1, var2;
-
-    if (!floatFormat) {
-        var1 = parseInt(num1, 10);
-        var2 = parseInt(num2, 10);
-    } else {
-        var1 = parseFloat(num1);
-        var2 = parseFloat(num2);
-    }
-
-    if (isNaN(num1) || isNaN(num2))
-        throw "Invalid arguments";
-
-    return var1 / var2;
-}
-
-function getDifference(num1, num2, floatFormat = false) {
-    let var1, var2;
-
-    if (!floatFormat) {
-        var1 = parseInt(num1, 10);
-        var2 = parseInt(num2, 10);
-    } else {
-        var1 = parseFloat(num1);
-        var2 = parseFloat(num2);
-    }
-
-    if (isNaN(num1) || isNaN(num2))
+    if (isNaN(var1) || isNaN(var2))
         throw "Invalid arguments";
 
     return var1 - var2;
 }
+
+function getDivisionResult(num1, num2, floatFormat = false) {
+    let var1, var2;
+
+    if (!floatFormat) {
+        var1 = parseInt(num1, 10);
+        var2 = parseInt(num2, 10);
+    } else {
+        var1 = parseFloat(num1);
+        var2 = parseFloat(num2);
+    }
+
+    if (isNaN(var1) || isNaN(var2))
+        throw "Invalid arguments";
+
+
+    if (var2 === 0)
+        throw "Division by zero";
+    return var1 / var2;
+}
+
 
 //------------------------------------------------------------------------------
 
@@ -682,7 +689,7 @@ function QuickSort(sourceArray, left, right) {
     if (r - l <= 1) return;
 
     let t = (l + (r - l) / 2)
-    let mid = sourceArray[Math.ceil(l + (r - l) / 2)];
+    let mid = sourceArray[Math.floor(l + (r - l) / 2)];
     let ll = l,
         rr = r - 1;
 
@@ -726,7 +733,7 @@ function ShellSort(sourceArray) // * ∆k = (b∆k−1)/2  ∆0 = N
 
 //------------------------------------------------------------------------------
 
-let numbers = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F']
+let numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
 
 function ConvertFromDecimalToOther(numArray, digit) {
 
@@ -745,19 +752,23 @@ function ConvertFromDecimalToOther(numArray, digit) {
 }
 
 function ConvertToDecimal(num, digit) {
-    let numAsString  = num.join("");
+    let numAsString = num.join("");
     let numAsNumber = Number(numAsString);
     let res = 0;
     for (let i = num.length - 1; i >= 0; --i) {
         let j = num.length - 1 - i;
-        res += numbers.indexOf(num[i]) * Math.pow(digit,j);
+        res += numbers.indexOf(num[i]) * Math.pow(digit, j);
     }
     let bufres = String(res);
 
     return bufres.split("");
 }
 
-function ConvertFromToOther(num ,from, to) {
+function ConvertFromOneToOther(num, from, to) {
+    if(typeof(to) !== typeof(5))
+        throw new Error("Invalid args");
+    if((from <= 1)||(from > 16)||(to <= 1)||(to > 16) )
+        throw new Error("Invalid args");
     let decimal = ConvertToDecimal(num, from);
     return ConvertFromDecimalToOther(decimal, to);
 }
