@@ -7,26 +7,37 @@ F should accept any number of parameters to apply.
 */
 
 const enablePartialApplication = (fn) => (...args) => {
+    if (typeof fn !== "function") {
+        throw new Error("fn parameter should be function");
+    }
+
     if (args.length >= fn.length)
         return fn(...args);
     return enablePartialApplication(fn.bind(null, ...args));
 };
 
 function partialApplication(func, ...args) {
+    if (typeof func !== "function") {
+        throw new Error("fn parameter should be function");
+    }
     const fun = enablePartialApplication(func);
     return fun(args);
 }
 
-function myPartialApplication(func, ...args) {
-    if(func.length >  args.length)
-        return (...otherArgs) => func(...args,...otherArgs);
+function partialApplicationImpl2(func, ...args) {
+    if (typeof func !== "function") {
+        throw new Error("fn parameter should be function");
+    }
+
+    if (func.length > args.length)
+        return (...otherArgs) => func(...args, ...otherArgs);
     else
         return () => func(...args);
 }
 
-const _fn = (x, y, z) => (x * y) / z;
-const fnFixedX = myPartialApplication(_fn, 3); // fixes x to 3: (y, z) => (3 * y) / z
-console.log(fnFixedX(2, 1));
+//const _fn = (x, y, z) => (x * y) / z;
+//const fnFixedX = partialApplicationImpl2(_fn, 3); // fixes x to 3: (y, z) => (3 * y) / z
+//console.log(fnFixedX(2, 1));
 
 /*--------------------------------------Currying----------------------------------------  -
 Implement function curry that allows to do currying like:
@@ -37,16 +48,30 @@ Implement function curry that allows to do currying like:
 */
 
 const enableCurry = (fn) => (arg) => {
+    if (typeof fn !== "function") {
+        throw new Error("fn parameter should be function");
+    }
+
     if (1 >= fn.length)
         return fn(arg);
     return enableCurry(fn.bind(null, arg));
 };
 
-function myEnableCurry(func, arg) {
-    if(func.length >  1)
-        return (...otherArgs) => func(arg,...otherArgs);
-    else
-        return () => func(arg);
+function curryImpl2(func) {
+    if (typeof func !== "function") {
+        throw new Error("fn parameter should be function");
+    }
+
+    function curry(...args) {
+        if (func.length <= args.length) {
+            return func(...args);
+        }
+
+        if (func.length > args.length) {
+            return (...addArgs) => curry(...args, ...addArgs);
+        }
+    };
+    return curry
 }
 
 const cfn = (x, y, z) => {
@@ -57,14 +82,16 @@ const cfn = (x, y, z) => {
     console.log("end");
 };
 
-let  test2 = myEnableCurry(cfn);
-let c1 = test2(1);
-console.log(c1);
-let c2 = c1(2);
-console.log(c2);
-let c3 = c2(3);
-console.log(c3);
-
+/*
+let test2 = enableCurry(cfn);
+console.log(test2(1));
+console.log(test2(1)(2));
+console.log(test2(1)(2)(3));
+test2 = curryImpl2(cfn);
+console.log(test2(1));
+console.log(test2(1)(2));
+console.log(test2(1)(2)(3));
+*/
 
 /* ---------------------------------------------Linear fold-------------------------------------- 
 Implement linear fold function that works on arrays: F(array, callback[, initialValue]), 
@@ -88,6 +115,13 @@ function callbackImpl(previousValue, currentValue, i, array) {
 
 
 function processArray(array, callback, initialValue) {
+    if (typeof callback !== "function") {
+        throw new Error("'callback' parameter should be type of function");
+    }
+    if (!Array.isArray(array)) {
+        throw new Error("'array' parameter should be type of array");
+    }
+
     let currentValue;
     let previousValue = (initialValue != undefined) ? initialValue : "lol";
     for (let i = 0; i < array.length; i++) {
@@ -124,6 +158,10 @@ function callbackImpl2(state) {
 
 
 function UnfoldValue(callback, initialValue) {
+    if (typeof callback !== "function") {
+        throw new Error("'callback' parameter should be type of function");
+    }
+
     let values = [];
     let currState = initialValue;
     do {
@@ -145,6 +183,14 @@ calling a provided function on every element in this array.
 
 
 function MapArray(array, callback) {
+    if (typeof callback !== "function") {
+        throw new Error("'callback' parameter should be type of function");
+    }
+    if (!Array.isArray(array)) {
+        throw new Error("'array' parameter should be type of array");
+    }
+
+
     let result = [];
     for (let i = 0; i < array.length; i++) {
         let callbackResult = callback(array[i], i, array);
@@ -161,6 +207,13 @@ Does ES5 has built-in alternative
  */
 
 function FilterArray(array, callback) {
+    if (typeof callback !== "function") {
+        throw new Error("'callback' parameter should be type of function");
+    }
+    if (!Array.isArray(array)) {
+        throw new Error("'array' parameter should be type of array");
+    }
+
     let result = [];
     for (let i = 0; i < array.length; i++) {
         if (callback(array[i], i, array))
@@ -180,7 +233,7 @@ function averageCallback(previousValue, currentValue, i, array) {
     return ((currentValue / array.length) + previousValue);
 }
 
-let testarg = [1, 23, 2, 6, 12, 0];
+//let testarg = [1, 23, 2, 6, 12, 0];
 //console.log(processArray(FilterArray(testarg,(value)=> value % 2 == 0),averageCallback,0));
 
 /*---------------------------------------Sum of random numbers------------------------------------------- 
@@ -215,7 +268,9 @@ Implement a function that returns the first element in array that satisfies give
 
 let temp = [1, 23, 2, 6, 12, 0];
 let temp1 = FilterArray(temp, (value) => value % 3 == 0);
-let f = (value, index, array) => { return index === 0 };
+let f = (value, index, array) => {
+    return index === 0
+};
 //temp1 = FilterArray(temp,(value)=>value % 3 == 0);
 temp1 = FilterArray(temp1, f);
 //console.log(temp1);
@@ -224,6 +279,8 @@ temp1 = FilterArray(temp1, f);
 Implement a function that takes list of parameters and makes any given function lazy.
  */
 function LazyEvaluation(fn, ...args) {
+    if(fn.length < args.length)
+        throw new Error("Not enought arguments");
     return () => fn(...args);
 }
 
@@ -236,9 +293,9 @@ function testfun(arg1, arg2, arg3, arg4) {
     return "чпок";
 }
 
-let lazy = LazyEvaluation(testfun,1,2,3,4,);
-console.log(lazy);
-console.log(lazy());
+//let lazy = LazyEvaluation(testfun, 1, 2, 3, 4, );
+//console.log(lazy);
+///console.log(lazy());
 
 
 /*---------------------------------------------Memoization--------------------------------------------------- 
@@ -249,10 +306,9 @@ console.log(lazy());
     Watch out for NaN, undefined and circular references. 
 */
 
-function MemFunction(fn)
-{
+function MemFunction(fn) {
     var cache = {};
-    return (...args)=> {
+    return (...args) => {
         let key = args.toString();
         if (key in cache) {
             return cache[key];

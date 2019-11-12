@@ -240,7 +240,7 @@ function getFormatDate(dateAsString, format = "DDMMYYYY") {
     let year = "";
 
     if (dateAsString.length != format.length)
-        return;
+        throw "Format and date length is different";
 
     for (let i = 0; i < dateAsString.length; i++) {
         switch (format[i]) {
@@ -259,7 +259,7 @@ function getFormatDate(dateAsString, format = "DDMMYYYY") {
     let result = new Date(Number(year), Number(month) - 1, Number(day), 12);
 
     if ((result.getDate() != Number(day)) || (result.getFullYear() != Number(year)) || (result.getMonth() != (Number(month) - 1))) {
-        throw "Incorrect date";
+        throw "This date does not exist";
     }
 
     return result;
@@ -762,9 +762,9 @@ function ConvertFromToOther(num ,from, to) {
     return ConvertFromDecimalToOther(decimal, to);
 }
 
-console.log(ConvertFromToOther(['1','2','3','1','2','4','2','4','3','4'] ,16,8));
+/*console.log(ConvertFromToOther(['1','2','3','1','2','4','2','4','3','4'] ,16,8));
 let test = ConvertFromToOther(['1','2','3','1','2','4','2','4','3','4'] ,16,8);
 for(let i = 0; i < test.length;i++)
 {
     console.log(test[i]);
-}
+}*/
