@@ -11,7 +11,7 @@
     Написать функционал поиска минимального, максимального,
     медианного значения в массиве.
     c.	Selection Task
-    Написать функционал поиска возрастающей последовательности 
+    Написать функционал поиска возрастающей последовательности
     максимальной длины в исходном массиве.
 
 */
@@ -67,6 +67,8 @@ let testArgs = [
 ];
 
 function getMin(array) {
+    // throw
+    // Operations priority is incorrect, `!` has higher priority than `===`
     if ((!array.constructor === Array) && (array.length == 0))
         return "argument isn't array";
 
@@ -79,6 +81,7 @@ function getMin(array) {
 }
 
 function getMax(array) {
+    // throw
     if ((!array.constructor === Array) && (array.length == 0))
         return "argument isn't array";
 
@@ -97,6 +100,7 @@ function getMedian(array) {
         if (a < b) return -1; // если первое значение меньше второго
     }
 
+    // throw
     if ((!array.constructor === Array) && (array.length == 0))
         return "argument isn't array";
 
@@ -144,6 +148,7 @@ function getLongestIncreasingSequence(array) {
         }
     }
 
+    // Remove console log after debugging
     console.log(startIndex);
     console.log(endIndex);
     return array.slice(startIndex, endIndex + 1);
@@ -160,9 +165,9 @@ var arrayProcessor = {
 
 
 /*
-    Разработать объект для форматирования дат 
+    Разработать объект для форматирования дат
     (объект содержащий набор функций). Объект
-    должен позволять обрабатывать входные данные 
+    должен позволять обрабатывать входные данные
     в виде строки или в виде числа (ticks, ms).
     Объект должен поддерживать возможность передачи
     внутрь формата для разбора исходной строки
@@ -177,6 +182,12 @@ let dateTestArgsFormats = [
     null, null, "YYYYMMDD", "YYYY-MM-DD"
 ]
 
+
+// It should work differently
+// You pass date object and get string
+// let date = new Date('21-11-2019');
+// let str = formatDate(date, 'YYYYMMDD')
+// result is `20191121`
 function getFormatDate(dateAsString, format = "DDMMYYYY") {
     let day = "";
     let month = "";
@@ -256,7 +267,7 @@ var dateFormatter = {
     максимальный размер строки (опционально),
     максимальное количество строк (опционально),
     тип форматирования (“перенос по слову”,
-    “перенос по символу”, “перенос по предложению”, 
+    “перенос по символу”, “перенос по предложению”,
     “переносов нет” - опционально).
 */
 
@@ -467,7 +478,7 @@ var textFormatter = {
 //------------------------------------------------------------------------------
 /*
     4.	String calculator
-    Разработать объект содержащий набор методов для выполнения функций 
+    Разработать объект содержащий набор методов для выполнения функций
     калькулятора над числами передаваемыми в строковом представлении.
     Методы должны позволять работать как в целочисленном, так и вещественном формате.
 */
@@ -475,6 +486,7 @@ var textFormatter = {
 function getAdditionResult(num1, num2, floatFormat = false) {
     let var1, var2;
 
+    // You can put this code to a separate function
     if (!floatFormat) {
         var1 = parseInt(num1, 10);
         var2 = parseInt(num2, 10);
@@ -556,6 +568,7 @@ var calculator = {
     5.Реализовать 4 различных сортирповки массива
 */
 
+// function names should start with small letter
 function BubbleSort(sourceArray) {
     if ((!sourceArray.constructor === Array) && (sourceArray.length == 0))
         return "argument isn't array";
@@ -667,17 +680,19 @@ let numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 
 
 function ConvertFromDecimalToOther(numArray, digit) {
 
+    // Unused variable
     let buf = numArray.join("");
     let num = Number(numArray.join(""));
     let number = "";
+    // Russian variable name
     let ostatok;
-    
+
     while (num >= digit) {
         ostatok = num % digit;
         number = number + numbers[ostatok];
         num = Math.floor(num / digit);
     }
-    
+
     number = number + numbers[num];
     let result = String(number).split("").reverse();
     return result;
