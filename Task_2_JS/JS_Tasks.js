@@ -1,33 +1,21 @@
 /*
-1.	Array Processing Tool
-a.	Sub Sum
-На входе массив чисел, например: arr = [1, -2, 3, 4, -9, 6].
-Задача — найти непрерывный подмассив arr,
- сумма элементов которого максимальна.
-  Функция должна возвращать только эту сумму.
+    1.	Array Processing Tool
+    a.	Sub Sum
+    На входе массив чисел, например: arr = [1, -2, 3, 4, -9, 6].
+    Задача — найти непрерывный подмассив arr,
+    сумма элементов которого максимальна.
+    Функция должна возвращать только эту сумму.
 
-Например:
-1.	getMaxSubSum([-1, 2, 3, -9]) = 5
-2.	getMaxSubSum([2, -1, 2, 3, -9]) = 6
-3.	getMaxSubSum([-1, 2, 3, -9, 11]) = 11 
-4.	getMaxSubSum([-2, -1, 1, 2]) = 3
-5.	getMaxSubSum([100, -9, 2, -3, 5]) = 100
-6.	getMaxSubSum([1, 2, 3]) = 6
-7.	getMaxSubSum([-1, -2, -3]) = 0
-
-Написать два решения, сложность O(n2) и O(n).
-b.	Search
-Написать функционал поиска минимального, максимального,
- медианного значения в массиве.
-c.	Selection Task
-Написать функционал поиска возрастающей последовательности 
-максимальной длины в исходном массиве.
-
-Например: 1, 3, 7, 4, 6, 7, 8, 1, 2, 5, 7, 8, 90, 1
-
-	Все функции обернуть в один объект для обработки массивов.
+    Написать два решения, сложность O(n2) и O(n).
+    b.	Search
+    Написать функционал поиска минимального, максимального,
+    медианного значения в массиве.
+    c.	Selection Task
+    Написать функционал поиска возрастающей последовательности 
+    максимальной длины в исходном массиве.
 
 */
+
 
 function getMaxSubSumOn2(array) {
     let bufMaxSum = 0;
@@ -161,69 +149,24 @@ function getLongestIncreasingSequence(array) {
     return array.slice(startIndex, endIndex + 1);
 }
 
-/*
-console.log("-------------subsum---------------");
-for(let i = 0; i < testArgs.length;i++)
-{
-    console.log(testArgs[i]);
-    console.log(getMaxSubSumOn2(testArgs[i]));
-    console.log(getMaxSubSumOn(testArgs[i]));
-    console.log();
+var arrayProcessor = {
+    getMaxSubSumOn2: getMaxSubSumOn2,
+    getMaxSubSumOn: getMaxSubSumOn,
+    getMin: getMin,
+    getMax: getMax,
+    getMedian: getMedian,
+    getLongestIncreasingSequence: getLongestIncreasingSequence
 }
-
-console.log("-------------min---------------");
-for(let i = 0; i < testArgs.length;i++)
-{
-    console.log(testArgs[i]);
-    console.log(getMin(testArgs[i]));
-}
-
-console.log("-------------max---------------");
-for(let i = 0; i < testArgs.length;i++)
-{
-    console.log(testArgs[i]);
-    console.log(getMax(testArgs[i]));
-}
-
-console.log("-----------average-------------");
-for(let i = 0; i < testArgs.length;i++)
-{
-    console.log(testArgs[i]);
-    console.log(getMedian(testArgs[i]));
-}
-
-console.log("-------------longest increasing sequence---------------");
-for(let i = 0; i < testArgs.length;i++)
-{
-    console.log(testArgs[i]);
-    console.log(getLongestIncreasingSequence(testArgs[i]));
-}
-*/
-
-
-
-
-
 
 
 /*
-Разработать объект для форматирования дат 
-(объект содержащий набор функций). Объект
- должен позволять обрабатывать входные данные 
- в виде строки или в виде числа (ticks, ms).
-  Объект должен поддерживать возможность передачи
-   внутрь формата для разбора исходной строки
+    Разработать объект для форматирования дат 
+    (объект содержащий набор функций). Объект
+    должен позволять обрабатывать входные данные 
+    в виде строки или в виде числа (ticks, ms).
+    Объект должен поддерживать возможность передачи
+    внутрь формата для разбора исходной строки
     и построения выходной строки.
-
-Например:
-1.	“31102011” => “31-10-2011”
-2.	“31102011” => “31 October 2011”
-3.	(“20130431”, “YYYYMMDD”) => 31 April 2013
-4.	(“20130431”, “MM-DD-YYYY”) => 04-31-2013
-5.	(“2013-04-31”, “YYYY-MM-DD”).fromNow() => 2 years ago
-		
-		Реализовать как можно больше прикладных конверсий.
-
 */
 
 let dateTestArgs = [
@@ -301,43 +244,21 @@ function fromNow(dateAsString, format = "DDMMYYYY") {
         return "incorrect args"
 }
 
-/*
-console.log("-------------time formatter---------------");
-for (let i = 0; i < dateTestArgs.length; i++) {
-    console.log(dateTestArgs[i]);
-    console.log(dateTestArgsFormats[i]);
-    try {
-        if (dateTestArgsFormats[i] == null) {
-            console.log(getShortDate(dateTestArgs[i]));
-            console.log(getLongDate(dateTestArgs[i]));
-            console.log(fromNow(dateTestArgs[i]));
-        } else {
-            console.log(getShortDate(dateTestArgs[i], dateTestArgsFormats[i]));
-            console.log(getLongDate(dateTestArgs[i], dateTestArgsFormats[i]));
-            console.log(fromNow(dateTestArgs[i], dateTestArgsFormats[i]));
-        }
-    } catch (e) {
-        console.log(e)
-    }
-    console.log();
+var dateFormatter = {
+    getShortDate: getShortDate,
+    getLongDate: getLongDate,
+    fromNow: fromNow,
 }
-*/
-
-
-
-//------------------------------------------------------------------------------
-
-
 
 /*
-Написать функцию обработчика входного текста.
-Функция должна принимать на вход строку,
-максимальный размер строки (опционально),
-максимальное количество строк (опционально),
-тип форматирования (“перенос по слову”,
-“перенос по символу”, “перенос по предложению”, 
-“переносов нет” - опционально).
- */
+    Написать функцию обработчика входного текста.
+    Функция должна принимать на вход строку,
+    максимальный размер строки (опционально),
+    максимальное количество строк (опционально),
+    тип форматирования (“перенос по слову”,
+    “перенос по символу”, “перенос по предложению”, 
+    “переносов нет” - опционально).
+*/
 
 
 function splice(sourceString, start, delCount, newSubStr) {
@@ -537,30 +458,19 @@ function sentenceFormat(sourceString, maxLineSize = 0, maxLineCount = 0) {
     }
     return sourceString;
 }
-//console.log("Symbols:");
-//console.log(symbolFormat("tessd gjfsdft\nsdfsghdfsdjgh f\nsdfs ddfsd  fsdf\nsdfdfsdfsdfs dfsdfsddgsdg sdg", 7, 6));
-let str = "Halloween, the time of pumpkins, candies, ghosts, witches and much more, is annually celebrated on 31 October. That's the night before All Saints Day. Its origins date back thousands of years to the Celtic festival of Samhaim or The Feast of the Sun, a most significant holiday of the Celtic year. This day marked the end of summer but also the season of darkness as well as the beginning of the New Year on 1 November."
-/*
-console.log(str);
-console.log();
-console.log("word:");
-console.log(wordFormat(str));
-console.log();
-console.log("symbol:");
-console.log(symbolFormat(str));
-console.log();
-console.log("symbol:");
-console.log(sentenceFormat(str));
-*/
+
+var textFormatter = {
+    getFormatText: getFormatText,
+}
 
 
 //------------------------------------------------------------------------------
 /*
-4.	String calculator
-Разработать объект содержащий набор методов для выполнения функций 
-калькулятора над числами передаваемыми в строковом представлении.
- Методы должны позволять работать как в целочисленном, так и вещественном формате.
- */
+    4.	String calculator
+    Разработать объект содержащий набор методов для выполнения функций 
+    калькулятора над числами передаваемыми в строковом представлении.
+    Методы должны позволять работать как в целочисленном, так и вещественном формате.
+*/
 
 function getAdditionResult(num1, num2, floatFormat = false) {
     let var1, var2;
@@ -633,8 +543,18 @@ function getDivisionResult(num1, num2, floatFormat = false) {
     return var1 / var2;
 }
 
+var calculator = {
+    getAdditionResult: getAdditionResult,
+    getMultiplicationResult: getMultiplicationResult,
+    getSubtractionResult: getSubtractionResult,
+    getDivisionResult: getDivisionResult
+}
+
 
 //------------------------------------------------------------------------------
+/*
+    5.Реализовать 4 различных сортирповки массива
+*/
 
 function BubbleSort(sourceArray) {
     if ((!sourceArray.constructor === Array) && (sourceArray.length == 0))
@@ -714,8 +634,7 @@ function QuickSort(sourceArray, left, right) {
     return sourceArray;
 }
 
-function ShellSort(sourceArray) // * ∆k = (b∆k−1)/2  ∆0 = N
-{
+function ShellSort(sourceArray) {
     let step, i, j, tmp;
     let size = sourceArray.length;
     for (step = Math.floor(size / 1.7); step >= 1; step = Math.floor(step / 1.7)) {
@@ -731,7 +650,18 @@ function ShellSort(sourceArray) // * ∆k = (b∆k−1)/2  ∆0 = N
     return sourceArray;
 }
 
+var arraySorter = {
+    BubbleSort: BubbleSort,
+    SelectionSort: SelectionSort,
+    QuickSort: QuickSort,
+    ShellSort: ShellSort
+}
+
 //------------------------------------------------------------------------------
+
+/*
+    6.НАписать функцию конвертации чисел из одной сс в другую
+*/
 
 let numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
 
@@ -741,11 +671,13 @@ function ConvertFromDecimalToOther(numArray, digit) {
     let num = Number(numArray.join(""));
     let number = "";
     let ostatok;
+    
     while (num >= digit) {
         ostatok = num % digit;
         number = number + numbers[ostatok];
         num = Math.floor(num / digit);
     }
+    
     number = number + numbers[num];
     let result = String(number).split("").reverse();
     return result;
@@ -755,27 +687,38 @@ function ConvertToDecimal(num, digit) {
     let numAsString = num.join("");
     let numAsNumber = Number(numAsString);
     let res = 0;
+
     for (let i = num.length - 1; i >= 0; --i) {
         let j = num.length - 1 - i;
         res += numbers.indexOf(num[i]) * Math.pow(digit, j);
     }
+
     let bufres = String(res);
 
     return bufres.split("");
 }
 
 function ConvertFromOneToOther(num, from, to) {
-    if(typeof(to) !== typeof(5))
+
+    if (typeof (to) !== typeof (5))
         throw new Error("Invalid args");
-    if((from <= 1)||(from > 16)||(to <= 1)||(to > 16) )
+    if ((from <= 1) || (from > 16) || (to <= 1) || (to > 16))
         throw new Error("Invalid args");
+
+
     let decimal = ConvertToDecimal(num, from);
     return ConvertFromDecimalToOther(decimal, to);
 }
 
-/*console.log(ConvertFromToOther(['1','2','3','1','2','4','2','4','3','4'] ,16,8));
-let test = ConvertFromToOther(['1','2','3','1','2','4','2','4','3','4'] ,16,8);
-for(let i = 0; i < test.length;i++)
-{
-    console.log(test[i]);
-}*/
+var numberConverter = {
+    ConvertFromOneToOther: ConvertFromOneToOther
+}
+
+var imports = {
+    numberConverter,
+    arraySorter,
+    calculator,
+    textFormatter,
+    dateFormatter,
+    arrayProcessor
+};

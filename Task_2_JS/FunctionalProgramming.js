@@ -233,7 +233,8 @@ function averageCallback(previousValue, currentValue, i, array) {
     return ((currentValue / array.length) + previousValue);
 }
 
-//let testarg = [1, 23, 2, 6, 12, 0];
+let testarg = [1, 23, 2, 6, 12, 0];
+processArray(FilterArray(testarg,(value)=> value % 2 == 0),averageCallback,0)
 //console.log(processArray(FilterArray(testarg,(value)=> value % 2 == 0),averageCallback,0));
 
 /*---------------------------------------Sum of random numbers------------------------------------------- 
@@ -258,8 +259,8 @@ function UnfoldCallback(state) {
     }
 }
 
-//let temp = UnfoldValue(UnfoldCallback, 10);
-//console.log(temp);
+let temp = UnfoldValue(UnfoldCallback, 10);
+processArray(temp,SumCallback,0)
 //console.log(processArray(temp,SumCallback,0));
 
 /*----------------------------------------------First------------------------------------------------------
@@ -293,7 +294,7 @@ function testfun(arg1, arg2, arg3, arg4) {
     return "чпок";
 }
 
-//let lazy = LazyEvaluation(testfun, 1, 2, 3, 4, );
+let lazy = LazyEvaluation(testfun, 1, 2, 3, 4 );
 //console.log(lazy);
 ///console.log(lazy());
 

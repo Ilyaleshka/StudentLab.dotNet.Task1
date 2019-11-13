@@ -3,21 +3,21 @@ function processArray() {
     let textarea = document.getElementById("array-procesing-results");
     let array = input.value;
     array = array.split(",").map(x => Number(x));
-    let results = "Max subsum = " + getMaxSubSumOn2(array);
-    results += "\nMin = " + getMin(array);
-    results += "\nMax = " + getMax(array);
-    results += "\nMedian = " + getMedian(array.slice());
-    results += "\nLongest increasing sequence = " + getLongestIncreasingSequence(array);
-    results += "\nSorted (bubble) : " + BubbleSort(array.slice()).map((value) => {
+    let results = "Max subsum = " + imports.arrayProcessor.getMaxSubSumOn2(array);
+    results += "\nMin = " + imports.arrayProcessor.getMin(array);
+    results += "\nMax = " + imports.arrayProcessor.getMax(array);
+    results += "\nMedian = " + imports.arrayProcessor.getMedian(array.slice());
+    results += "\nLongest increasing sequence = " + imports.arrayProcessor.getLongestIncreasingSequence(array);
+    results += "\nSorted (bubble) : " + imports.arraySorter.BubbleSort(array.slice()).map((value) => {
         return String(value);
     }).join(",");
-    results += "\nSorted (Selection) : " + SelectionSort(array.slice()).map((value) => {
+    results += "\nSorted (Selection) : " + imports.arraySorter.SelectionSort(array.slice()).map((value) => {
         return String(value);
     }).join(",");
-    results += "\nSorted (QuickSort) : " + QuickSort(array.slice(), 0, array.length).map((value) => {
+    results += "\nSorted (QuickSort) : " + imports.arraySorter.QuickSort(array.slice(), 0, array.length).map((value) => {
         return String(value);
     }).join(",");
-    results += "\nSorted (ShellSort) : " + ShellSort(array.slice()).map((value) => {
+    results += "\nSorted (ShellSort) : " + imports.arraySorter.ShellSort(array.slice()).map((value) => {
         return String(value);
     }).join(",");
     textarea.innerText = results;
@@ -33,13 +33,13 @@ function formateDate() {
     let shorttime, longtime, fromnow;
     try {
         if (format.trim() == "") {
-            shorttime = getShortDate(date.trim());
-            longtime = getLongDate(date.trim());
-            fromnow = fromNow(date.trim());
+            shorttime = imports.dateFormatter.getShortDate(date.trim());
+            longtime = imports.dateFormatter.getLongDate(date.trim());
+            fromnow = imports.dateFormatter.fromNow(date.trim());
         } else {
-            shorttime = getShortDate(date.trim(), format.trim());
-            longtime = getLongDate(date.trim(), format.trim());
-            fromnow = fromNow(date.trim(), format.trim());
+            shorttime = imports.dateFormatter.getShortDate(date.trim(), format.trim());
+            longtime = imports.dateFormatter.getLongDate(date.trim(), format.trim());
+            fromnow = imports.dateFormatter.fromNow(date.trim(), format.trim());
         }
         results = "Short format : " + shorttime;
         results += "\nLong format : " + longtime;
@@ -76,20 +76,20 @@ function formateText() {
     if (isNaN(lineLength) || isNaN(linesCount) || (linesCount < 0) || (lineLength < 0))
         result = "Invalid line length or line count";
     else
-        result = getFormatText(date, lineLength, linesCount, format);
+        result = imports.textFormatter.getFormatText(date, lineLength, linesCount, format);
 
     let textarea = document.getElementById("text-formatter-results");
     textarea.innerText = result;
 }
-//calc-results
+
 function calcAdd() {
     let val1 = document.getElementById("calc-arg1-input").value;
     let val2 = document.getElementById("calc-arg2-input").value;
-    let floatFormat = document.getElementsByName("calc-format")[0].checked; //calc-format
+    let floatFormat = document.getElementsByName("calc-format")[0].checked; 
 
     let result;
     try {
-        result = getAdditionResult(val1, val2, floatFormat);
+        result = imports.calculator.getAdditionResult(val1, val2, floatFormat);
     } catch (e) {
         result = e;
     }
@@ -100,11 +100,11 @@ function calcAdd() {
 function calcSub() {
     let val1 = document.getElementById("calc-arg1-input").value;
     let val2 = document.getElementById("calc-arg2-input").value;
-    let floatFormat = document.getElementsByName("calc-format")[0].checked; //calc-format
+    let floatFormat = document.getElementsByName("calc-format")[0].checked; 
 
     let result;
     try {
-        result = getSubtractionResult(val1, val2, floatFormat);
+        result = imports.calculator.getSubtractionResult(val1, val2, floatFormat);
     } catch (e) {
         result = e;
     }
@@ -115,10 +115,10 @@ function calcSub() {
 function calcMul() {
     let val1 = document.getElementById("calc-arg1-input").value;
     let val2 = document.getElementById("calc-arg2-input").value;
-    let floatFormat = document.getElementsByName("calc-format")[0].checked; //calc-format
+    let floatFormat = document.getElementsByName("calc-format")[0].checked;
     let result;
     try {
-        result = getMultiplicationResult(val1, val2, floatFormat);
+        result = imports.calculator.getMultiplicationResult(val1, val2, floatFormat);
     } catch (e) {
         result = e;
     }
@@ -129,11 +129,11 @@ function calcMul() {
 function calcDiv() {
     let val1 = document.getElementById("calc-arg1-input").value;
     let val2 = document.getElementById("calc-arg2-input").value;
-    let floatFormat = document.getElementsByName("calc-format")[0].checked; //calc-format
+    let floatFormat = document.getElementsByName("calc-format")[0].checked; 
 
     let result;
     try {
-        result = getDivisionResult(val1, val2, floatFormat);
+        result = imports.calculator.getDivisionResult(val1, val2, floatFormat);
     } catch (e) {
         result = e;
     }
@@ -148,7 +148,7 @@ function translateNumberSystem() {
 
     let result;
     try {
-        result = ConvertFromOneToOther(num.split(""), Number(from), Number(to)).join("");
+        result = imports.numberConverter.ConvertFromOneToOther(num.split(""), Number(from), Number(to)).join("");
     } catch (e) {
         result = e;
     }
@@ -187,6 +187,3 @@ element.addEventListener("click", calcDiv);
 
 element = document.getElementById("translate-button");
 element.addEventListener("click", translateNumberSystem);
-
-
-//date-formatter-button
