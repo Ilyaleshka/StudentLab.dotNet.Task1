@@ -25,7 +25,7 @@
         #text-formatter-date-input {
             display: block;
             margin: 0 auto;
-            width: 400px;
+            width: 100%;
             height: 200px;
             resize: none;
         }
@@ -34,23 +34,32 @@
 
 <body>
     <div class="test-field">
+
         <fieldset>
             <legend>Array Processing Tool</legend>
             <label>Array <input type="text" class="array-input" id="array-procesing-input" required></label>
             <button id="array-procesing-button">Procces</button>
             <p id="array-procesing-results"></p>
         </fieldset>
+
         <fieldset>
             <legend>Date formatter</legend>
-            <label>Date <input type="text" class="array-input" id="date-formatter-date-input" required></label>
+            Day<select id="date-day">
+            </select>
+            Month<select id="date-month">
+            </select>
+            Year<select id="date-year">
+            </select>
             <label>Format <input type="text" class="array-input" id="date-formatter-format-input" required
                     placeholder="example DDMMYYYY"></label>
             <button id="date-formatter-button">Format</button>
             <p id="date-formatter-results"></p>
         </fieldset>
+
         <fieldset>
             <legend>Text formatter</legend>
-            <textarea class="array-input" id="text-formatter-date-input" required>Halloween, the time of pumpkins, candies, ghosts, witches and much more, is annually celebrated on 31 October. That's the night before All Saints Day. Its origins date back thousands of years to the Celtic festival of Samhaim or The Feast of the Sun, a most significant holiday of the Celtic year. This day marked the end of summer but also the season of darkness as well as the beginning of the New Year on 1 November.</textarea>
+            <textarea class="array-input" id="text-formatter-date-input"
+                required>Halloween, the time of pumpkins, candies, ghosts, witches and much more, is annually celebrated on 31 October. That's the night before All Saints Day. Its origins date back thousands of years to the Celtic festival of Samhaim or The Feast of the Sun, a most significant holiday of the Celtic year. This day marked the end of summer but also the season of darkness as well as the beginning of the New Year on 1 November.</textarea>
             <p><input name="wrap-type" type="radio" value="SYMBOL"> Symbol wrap</p>
             <p><input name="wrap-type" type="radio" value="WORD" checked> Word wrap</p>
             <p><input name="wrap-type" type="radio" value="SENTENCE"> Sentence wrap</p>
@@ -59,6 +68,7 @@
             <button id="text-formatter-button">Format</button>
             <p id="text-formatter-results"></p>
         </fieldset>
+
         <fieldset>
             <legend>Calculator</legend>
             <label>Arg 1 <input type="text" class="" id="calc-arg1-input"></label>
@@ -70,6 +80,7 @@
             <button id="calc-div-button">Division</button>
             <p id="calc-results"></p>
         </fieldset>
+
         <fieldset>
             <legend>Number system translator</legend>
             <label>Number <input type="text" class="" id="translate-number-input"></label>
@@ -79,9 +90,10 @@
             <button id="translate-button">Translate</button>
             <p id="translate-results"></p>
         </fieldset>
+
     </div>
-    <script type="text/javascript" src="./JS_Tasks.js"  ></script>
-    <script  type="text/javascript"  src="./function_test_script.js"></script>
+    <script type="text/javascript" src="./JS_Tasks.js"></script>
+    <script type="text/javascript" src="./function_test_script.js"></script>
 </body>
 
 </html>

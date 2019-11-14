@@ -69,8 +69,8 @@ let testArgs = [
 function getMin(array) {
     // throw
     // Operations priority is incorrect, `!` has higher priority than `===`
-    if ((!array.constructor === Array) && (array.length == 0))
-        return "argument isn't array";
+    if ((!(array.constructor === Array)) && (array.length == 0))
+        throw "argument isn't array";
 
     let min = array[0];
     for (let i = 1; i < array.length; i++) {
@@ -81,9 +81,8 @@ function getMin(array) {
 }
 
 function getMax(array) {
-    // throw
-    if ((!array.constructor === Array) && (array.length == 0))
-        return "argument isn't array";
+    if ((!(array.constructor === Array)) && (array.length == 0))
+        throw "argument isn't array";
 
     let min = array[0];
     for (let i = 1; i < array.length; i++) {
@@ -100,14 +99,13 @@ function getMedian(array) {
         if (a < b) return -1; // если первое значение меньше второго
     }
 
-    // throw
-    if ((!array.constructor === Array) && (array.length == 0))
-        return "argument isn't array";
+
+    if ((!(array.constructor === Array)) && (array.length == 0))
+        throw "argument isn't array";
 
 
     let len = array.length;
     array.sort(compare);
-    console.log(array);
     if ((len % 2) === 0)
         return ((array[len / 2] + array[(len / 2) - 1]) / 2);
     else
@@ -115,7 +113,7 @@ function getMedian(array) {
 }
 
 function getLongestIncreasingSequence(array) {
-    if ((!array.constructor === Array) && (array.length == 0))
+    if ((!(array.constructor === Array)) && (array.length == 0))
         return;
 
     let maxLenght = 0;
@@ -148,9 +146,6 @@ function getLongestIncreasingSequence(array) {
         }
     }
 
-    // Remove console log after debugging
-    console.log(startIndex);
-    console.log(endIndex);
     return array.slice(startIndex, endIndex + 1);
 }
 
@@ -162,7 +157,6 @@ var arrayProcessor = {
     getMedian: getMedian,
     getLongestIncreasingSequence: getLongestIncreasingSequence
 }
-
 
 /*
     Разработать объект для форматирования дат
@@ -188,6 +182,101 @@ let dateTestArgsFormats = [
 // let date = new Date('21-11-2019');
 // let str = formatDate(date, 'YYYYMMDD')
 // result is `20191121`
+function countSymbols(str, symbol) {
+    let smblArray = str.split("");
+    smblArray = smblArray.filter((smbl) => smbl === symbol);
+    return smblArray.length;
+}
+
+function formateDate(date, format = "DDMMYYYY") {
+    let dayFormatType = countSymbols(format, "D");
+    let monthFormatType = countSymbols(format, "M");
+    let yearFormatType = countSymbols(format, "Y");
+
+
+    let day = formatDay(date.getDate(), dayFormatType);
+    let month = formatMonth(date.getMonth(), monthFormatType);
+    let year = formatYear(date.getFullYear(), yearFormatType);
+
+    let dayTargetStr = "D".repeat(dayFormatType);
+    let dayIndex = format.indexOf(dayTargetStr);
+
+    if (dayIndex != -1) {
+        format = format.split("");
+        format.splice(dayIndex, dayFormatType);
+        format = format.join("");
+        format = format.slice(0, dayIndex) + day + format.slice(dayIndex);
+    }
+
+    let yearTargetStr = "Y".repeat(yearFormatType);
+    let yearIndex = format.indexOf(yearTargetStr);
+
+    if (yearIndex != -1) {
+        format = format.split("");
+        format.splice(yearIndex, yearFormatType);
+        format = format.join("");
+        format = format.slice(0, yearIndex) + year + format.slice(yearIndex);
+    }
+
+    let monthTargetStr = "M".repeat(monthFormatType);
+    let monthIndex = format.indexOf(monthTargetStr);
+
+    if (monthIndex != -1) {
+        format = format.split("");
+        format.splice(monthIndex, monthFormatType);
+        format = format.join("");
+        format = format.slice(0, monthIndex) + month + format.slice(monthIndex);
+    }
+
+    return format;
+}
+
+function formatDay(day, formatType) {
+    if (formatType == 2) {
+        return (String(day)).padStart(2, '0');
+    } else {
+        throw new Error("Unknown format");
+    }
+}
+
+function formatMonth(month, formatType) {
+    let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    if (formatType == 2) {
+        return (String(month + 1)).padStart(2, '0');
+    } else if (formatType == 3) {
+        return (months[month]).slice(0, 3);
+    } else if (formatType == 4) {
+        return months[month];
+    } else {
+        throw new Error("Unknown format");
+    }
+}
+
+function formatYear(year, formatType) {
+    if (formatType == 2) {
+        return (String(year % 100)).padStart(2, '0');
+    } else if (formatType == 4) {
+        return String(year);
+    } else {
+        throw new Error("Unknown format");
+    }
+}
+
+
+function yearsFromNow(date) {
+    let fromDate = date;
+    let currDate = Date.now();
+    let dateDiff = new Date(currDate - fromDate);
+    if (dateDiff != undefined) {
+        let year = String(dateDiff.getFullYear() - 1970);
+        if (year >= 0)
+            return year + " years ago";
+        else
+            return "after " + Math.abs(year) + " years";
+    } else
+        return "incorrect args"
+}
+
 function getFormatDate(dateAsString, format = "DDMMYYYY") {
     let day = "";
     let month = "";
@@ -218,7 +307,6 @@ function getFormatDate(dateAsString, format = "DDMMYYYY") {
 
     return result;
 }
-
 
 function getShortDate(dateAsString, format = "DDMMYYYY") {
     let date = getFormatDate(dateAsString, format);
@@ -259,6 +347,8 @@ var dateFormatter = {
     getShortDate: getShortDate,
     getLongDate: getLongDate,
     fromNow: fromNow,
+    formateDate: formateDate,
+    yearsFromNow: yearsFromNow,
 }
 
 /*
@@ -483,10 +573,9 @@ var textFormatter = {
     Методы должны позволять работать как в целочисленном, так и вещественном формате.
 */
 
-function getAdditionResult(num1, num2, floatFormat = false) {
+function parseCalculatorArgs(num1, num2, floatFormat) {
     let var1, var2;
 
-    // You can put this code to a separate function
     if (!floatFormat) {
         var1 = parseInt(num1, 10);
         var2 = parseInt(num2, 10);
@@ -497,61 +586,54 @@ function getAdditionResult(num1, num2, floatFormat = false) {
 
     if (isNaN(var1) || isNaN(var2))
         throw "Invalid arguments";
+
+    return {
+        var1,
+        var2
+    }
+}
+
+
+function getAdditionResult(num1, num2, floatFormat = false) {
+
+    let {
+        var1,
+        var2
+    } = parseCalculatorArgs(num1, num2, floatFormat);
 
     return var1 + var2;
 }
 
 function getMultiplicationResult(num1, num2, floatFormat = false) {
-    let var1, var2;
 
-    if (!floatFormat) {
-        var1 = parseInt(num1, 10);
-        var2 = parseInt(num2, 10);
-    } else {
-        var1 = parseFloat(num1);
-        var2 = parseFloat(num2);
-    }
-
-    if (isNaN(var1) || isNaN(var2))
-        throw "Invalid arguments";
+    let {
+        var1,
+        var2
+    } = parseCalculatorArgs(num1, num2, floatFormat);
 
     return var1 * var2;
 }
 
 function getSubtractionResult(num1, num2, floatFormat = false) {
-    let var1, var2;
 
-    if (!floatFormat) {
-        var1 = parseInt(num1, 10);
-        var2 = parseInt(num2, 10);
-    } else {
-        var1 = parseFloat(num1);
-        var2 = parseFloat(num2);
-    }
-
-    if (isNaN(var1) || isNaN(var2))
-        throw "Invalid arguments";
+    let {
+        var1,
+        var2
+    } = parseCalculatorArgs(num1, num2, floatFormat);
 
     return var1 - var2;
 }
 
 function getDivisionResult(num1, num2, floatFormat = false) {
-    let var1, var2;
 
-    if (!floatFormat) {
-        var1 = parseInt(num1, 10);
-        var2 = parseInt(num2, 10);
-    } else {
-        var1 = parseFloat(num1);
-        var2 = parseFloat(num2);
-    }
-
-    if (isNaN(var1) || isNaN(var2))
-        throw "Invalid arguments";
-
+    let {
+        var1,
+        var2
+    } = parseCalculatorArgs(num1, num2, floatFormat);
 
     if (var2 === 0)
         throw "Division by zero";
+
     return var1 / var2;
 }
 
@@ -568,8 +650,7 @@ var calculator = {
     5.Реализовать 4 различных сортирповки массива
 */
 
-// function names should start with small letter
-function BubbleSort(sourceArray) {
+function bubbleSort(sourceArray) {
     if ((!sourceArray.constructor === Array) && (sourceArray.length == 0))
         return "argument isn't array";
 
@@ -593,7 +674,7 @@ function BubbleSort(sourceArray) {
     return sourceArray;
 }
 
-function SelectionSort(sourceArray) {
+function selectionSort(sourceArray) {
     if ((!sourceArray.constructor === Array) && (sourceArray.length == 0))
         throw "argument isn't array";
 
@@ -615,7 +696,7 @@ function SelectionSort(sourceArray) {
 }
 
 
-function QuickSort(sourceArray, left, right) {
+function quickSort(sourceArray, left, right) {
     let l = left;
     let r = right;
 
@@ -638,16 +719,16 @@ function QuickSort(sourceArray, left, right) {
         }
     }
     if (l < rr) {
-        QuickSort(sourceArray, l, rr + 1);
+        quickSort(sourceArray, l, rr + 1);
     }
     if (ll < r) {
-        QuickSort(sourceArray, ll, r);
+        quickSort(sourceArray, ll, r);
     }
 
     return sourceArray;
 }
 
-function ShellSort(sourceArray) {
+function shellSort(sourceArray) {
     let step, i, j, tmp;
     let size = sourceArray.length;
     for (step = Math.floor(size / 1.7); step >= 1; step = Math.floor(step / 1.7)) {
@@ -664,10 +745,10 @@ function ShellSort(sourceArray) {
 }
 
 var arraySorter = {
-    BubbleSort: BubbleSort,
-    SelectionSort: SelectionSort,
-    QuickSort: QuickSort,
-    ShellSort: ShellSort
+    bubbleSort: bubbleSort,
+    selectionSort: selectionSort,
+    quickSort: quickSort,
+    shellSort: shellSort
 }
 
 //------------------------------------------------------------------------------
@@ -680,16 +761,14 @@ let numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 
 
 function ConvertFromDecimalToOther(numArray, digit) {
 
-    // Unused variable
-    let buf = numArray.join("");
     let num = Number(numArray.join(""));
     let number = "";
-    // Russian variable name
-    let ostatok;
+
+    let remainder;
 
     while (num >= digit) {
-        ostatok = num % digit;
-        number = number + numbers[ostatok];
+        remainder = num % digit;
+        number = number + numbers[remainder];
         num = Math.floor(num / digit);
     }
 
@@ -699,8 +778,6 @@ function ConvertFromDecimalToOther(numArray, digit) {
 }
 
 function ConvertToDecimal(num, digit) {
-    let numAsString = num.join("");
-    let numAsNumber = Number(numAsString);
     let res = 0;
 
     for (let i = num.length - 1; i >= 0; --i) {

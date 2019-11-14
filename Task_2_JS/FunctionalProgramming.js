@@ -16,15 +16,19 @@ const enablePartialApplication = (fn) => (...args) => {
     return enablePartialApplication(fn.bind(null, ...args));
 };
 
-// let foo = partialApplication((a, b, c) => a + b + c, 1)
-// foo(2, 3)
+
+ let foo = partialApplication((a, b, c) => a + b + c, 1)
+ console.log(foo(2, 3));
+ foo = partialApplicationImpl2((a, b, c) => a + b + c, 1)
+ console.log(foo(2, 3));
+
 // returns string "123" instead of number 6
 function partialApplication(func, ...args) {
     if (typeof func !== "function") {
         throw new Error("fn parameter should be function");
     }
     const fun = enablePartialApplication(func);
-    return fun(args);
+    return fun(...args);
 }
 
 // this one works fine
@@ -46,9 +50,8 @@ function partialApplicationImpl2(func, ...args) {
 /*--------------------------------------Currying----------------------------------------  -
 Implement function curry that allows to do currying like:
  𝑓(𝑥,𝑦,𝑧) = 𝑁, 𝑐𝑢𝑟𝑟𝑦(𝑓) = 𝑥 → (𝑦 → (𝑧 → 𝑁))
-  Function f may accept any number of explicit parameters.
-   Implicit parameters are not subject to curry.
-
+Function f may accept any number of explicit parameters.
+Implicit parameters are not subject to curry.
 */
 
 const enableCurry = (fn) => (arg) => {
@@ -101,11 +104,10 @@ console.log(test2(1)(2)(3));
 Implement linear fold function that works on arrays: F(array, callback[, initialValue]),
 callback: Function to execute on each value in the array, taking four arguments:
 previousValue: The value previously returned in the last invocation of the callback, or initialValue, if supplied.
- currentValue: The current element being processed in the array.
-  index: The index of the current element being processed in the array.
-   array: The array fold was called upon.
-    initialValue: Object to use as the first argument to the first call of the callback.
-
+currentValue: The current element being processed in the array.
+index: The index of the current element being processed in the array.
+array: The array fold was called upon.
+initialValue: Object to use as the first argument to the first call of the callback.
 */
 
 function callbackImpl(previousValue, currentValue, i, array) {
@@ -271,8 +273,8 @@ processArray(temp,SumCallback,0)
 Implement a function that returns the first element in array that satisfies given condition
 */
 
-let temp = [1, 23, 2, 6, 12, 0];
-let temp1 = FilterArray(temp, (value) => value % 3 == 0);
+let temp0 = [1, 23, 2, 6, 12, 0];
+let temp1 = FilterArray(temp0, (value) => value % 3 == 0);
 let f = (value, index, array) => {
     return index === 0
 };
@@ -315,7 +317,8 @@ function MemFunction(fn) {
     var cache = {};
     return (...args) => {
         // what if argument is an object? Any abject will be converted to "[object Object]"
-        let key = args.toString();
+        //let key = args.toString();
+        let key = JSON.stringify(args);
         if (key in cache) {
             return cache[key];
         }
@@ -328,8 +331,9 @@ function MemFunction(fn) {
 function sum(a, b, c) {
     return a + b + c;
 }
-
-/*let memSum = MemFunction(sum);
+/*
+let memSum = MemFunction(sum);
 sum(1,2,3);
 memSum(1,2,3);
-memSum(1,2,3);*/
+memSum(1,2,3);
+*/

@@ -1,3 +1,28 @@
+
+let selectElement;
+
+selectElement = document.getElementById('date-day');
+for (let i = 1; i < 32; i++) {
+    let optionElement = document.createElement('option');
+    optionElement.innerHTML = String(i);
+    selectElement.append(optionElement);
+}
+
+selectElement = document.getElementById('date-month');
+for (let i = 1; i < 13; i++) {
+    let  optionElement = document.createElement('option');
+    optionElement.innerHTML = String(i);
+    selectElement.append(optionElement);
+}
+
+selectElement = document.getElementById('date-year');
+for (let i = 1920; i < 2120; i++) {
+    let  optionElement = document.createElement('option');
+    optionElement.innerHTML = String(i);
+    selectElement.append(optionElement);
+}
+
+
 function processArray() {
     let input = document.getElementById("array-procesing-input");
     let textarea = document.getElementById("array-procesing-results");
@@ -8,21 +33,22 @@ function processArray() {
     results += "\nMax = " + imports.arrayProcessor.getMax(array);
     results += "\nMedian = " + imports.arrayProcessor.getMedian(array.slice());
     results += "\nLongest increasing sequence = " + imports.arrayProcessor.getLongestIncreasingSequence(array);
-    results += "\nSorted (bubble) : " + imports.arraySorter.BubbleSort(array.slice()).map((value) => {
+    results += "\nSorted (bubble) : " + imports.arraySorter.bubbleSort(array.slice()).map((value) => {
         return String(value);
     }).join(",");
-    results += "\nSorted (Selection) : " + imports.arraySorter.SelectionSort(array.slice()).map((value) => {
+    results += "\nSorted (Selection) : " + imports.arraySorter.selectionSort(array.slice()).map((value) => {
         return String(value);
     }).join(",");
-    results += "\nSorted (QuickSort) : " + imports.arraySorter.QuickSort(array.slice(), 0, array.length).map((value) => {
+    results += "\nSorted (QuickSort) : " + imports.arraySorter.quickSort(array.slice(), 0, array.length).map((value) => {
         return String(value);
     }).join(",");
-    results += "\nSorted (ShellSort) : " + imports.arraySorter.ShellSort(array.slice()).map((value) => {
+    results += "\nSorted (ShellSort) : " + imports.arraySorter.shellSort(array.slice()).map((value) => {
         return String(value);
     }).join(",");
     textarea.innerText = results;
 }
 //1,2,3,4,5,-9,6,-87,8,43,6,34,-7,9,-8,0,4,5,2,7,78,-9
+/*
 function formateDate() {
     let input = document.getElementById("date-formatter-date-input");
     let date = input.value;
@@ -52,6 +78,38 @@ function formateDate() {
     let textarea = document.getElementById("date-formatter-results");
     textarea.innerText = results;
 }
+*/
+
+function formateDateImpl2() {
+    let day = +(document.getElementById('date-day').value);
+    let month = +(document.getElementById('date-month').value);
+    let year = +(document.getElementById('date-year').value);
+
+    input = document.getElementById("date-formatter-format-input");
+    let format = input.value;
+    let result = "";
+
+    let date = new Date(year, month - 1, day, 12);
+    try {
+
+        if ((date.getDate() != day) || (date.getFullYear() != year) || (date.getMonth() != (month - 1))) {
+            throw "This date does not exist";
+        }
+
+        if (format.trim() !== "") {
+            result = imports.dateFormatter.formateDate(date, format);
+        } else
+            result = imports.dateFormatter.formateDate(date);
+
+        result += "\n" + imports.dateFormatter.yearsFromNow(date);
+    } catch (e) {
+        result = String(e);
+    }
+
+    let textarea = document.getElementById("date-formatter-results");
+    textarea.innerText = result;
+}
+
 
 function formateText() {
     let input = document.getElementById("text-formatter-date-input");
@@ -82,10 +140,11 @@ function formateText() {
     textarea.innerText = result;
 }
 
+
 function calcAdd() {
     let val1 = document.getElementById("calc-arg1-input").value;
     let val2 = document.getElementById("calc-arg2-input").value;
-    let floatFormat = document.getElementsByName("calc-format")[0].checked; 
+    let floatFormat = document.getElementsByName("calc-format")[0].checked;
 
     let result;
     try {
@@ -100,7 +159,7 @@ function calcAdd() {
 function calcSub() {
     let val1 = document.getElementById("calc-arg1-input").value;
     let val2 = document.getElementById("calc-arg2-input").value;
-    let floatFormat = document.getElementsByName("calc-format")[0].checked; 
+    let floatFormat = document.getElementsByName("calc-format")[0].checked;
 
     let result;
     try {
@@ -129,7 +188,7 @@ function calcMul() {
 function calcDiv() {
     let val1 = document.getElementById("calc-arg1-input").value;
     let val2 = document.getElementById("calc-arg2-input").value;
-    let floatFormat = document.getElementsByName("calc-format")[0].checked; 
+    let floatFormat = document.getElementsByName("calc-format")[0].checked;
 
     let result;
     try {
@@ -163,7 +222,7 @@ let element = document.getElementById("array-procesing-button");
 element.addEventListener("click", processArray);
 
 element = document.getElementById("date-formatter-button");
-element.addEventListener("click", formateDate);
+element.addEventListener("click", formateDateImpl2);
 
 element = document.getElementById("text-formatter-button");
 element.addEventListener("click", formateText);
