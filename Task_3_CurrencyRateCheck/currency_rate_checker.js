@@ -20,6 +20,7 @@ function fillCurrencySelect(currencies) {
     }
 }
 
+// Огромные функции, их следует разбить на более мелкие. Посмотри Single responsibility principle
 function currenciesRateQuery() {
     let dateRange;
 
@@ -51,6 +52,7 @@ function currenciesRateQuery() {
 
         let currCurency = selectedArray[i];
 
+        // Запрос было бы неплохо вынести в отдельную функцию
         let request = new XMLHttpRequest();
         request.onreadystatechange = function () {
 
@@ -76,6 +78,7 @@ function currenciesRateQuery() {
 
                 queryCount--;
                 if (queryCount <= 0) {
+                    // Зачем заполнять таблицу в цикле?
                     fillTableCallbackImpl2();
                    // fillTableCallback();
                 }
