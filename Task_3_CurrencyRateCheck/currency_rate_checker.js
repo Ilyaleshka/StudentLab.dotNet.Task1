@@ -1,12 +1,15 @@
 const CURRENCIES_URL = "http://www.nbrb.by/api/exrates/currencies";
-var queryCount = 0;
-var currencyRate = {};
-let allCurrencies = [];
-let currentCurrencies = [];
-let currencyCount = 5;
 const CURRENCY_RATE_URL = "https://www.nbrb.by/API/ExRates/Rates/Dynamics";
+let allCurrencies = [];
+
+// Можно обойтись без этих глобальных переменных
 let startDate = "2019-9-2";
 let endDate = "2019-10-4";
+var queryCount = 0;
+var currencyRate = {};
+let currentCurrencies = [];
+// Не используется
+let currencyCount = 5;
 
 function fillCurrencySelect(currencies) {
     let currencySelect = document.getElementById('selected-currency');
@@ -29,9 +32,14 @@ function loadCurrencyRate(currencyInfo, dateFrom, dateTo, currencyRageStorage, a
                 } catch {
                     currencyValues = [];
                 }
+                // Плохая практика изменять что-то в аргументах, если без этого можно обойтись.
+                // Попробуй использовать промисы и резолвить их в этим значением.
                 currencyRageStorage[currencyInfo.Cur_ID] = currencyValues;
             }
 
+            // Это выглядт как жесткий хак.
+            // Представь, что у тебя эта функция в отдельном модуле и может быть использована в разных ситуациях.
+            // Тогда ты не сможешь пользоваться глобальной переменной
             queryCount--;
             if (queryCount <= 0) {
                 allQueryExecutedCallback();
@@ -45,6 +53,7 @@ function loadCurrencyRate(currencyInfo, dateFrom, dateTo, currencyRageStorage, a
 }
 
 function updateSelectedCurrencies() {
+    // В Javascript принято писать "let selectedCurrencies = [];"
     let selectedCurrencies = new Array();
 
     let selectElement = document.getElementById('selected-currency');
@@ -89,6 +98,7 @@ function currenciesRateQuery() {
     queryCount = currentCurrencies.length;
 
     for (let i = 0; i < currentCurrencies.length; i++) {
+        // Попроуй промисы вместо коллбека, который вызывается по счетчику
         loadCurrencyRate(currentCurrencies[i], startDate, endDate, currencyRate, fillTableCallback);
     }
 }
@@ -151,6 +161,7 @@ function createDateFilterFunction(currDate) {
     return function (element) {
         let targetDate = new Date(Date.parse(currDate));
         let currentDate = new Date(Date.parse(element.Date));
+        // currentDate.toDateString() == targetDate.toDateString()
         if ((currentDate.getFullYear() == targetDate.getFullYear()) && (currentDate.getMonth() == targetDate.getMonth()) && (currentDate.getDate() == targetDate.getDate()))
             return true;
         else
@@ -232,7 +243,7 @@ function processDate() {
     }
 }
 
-
+// Если тебе надо разделить куски кода, используй комментарий, а не 10 пустых строк
 
 
 
@@ -260,12 +271,12 @@ function loadAllCurrencies()
                 fillCurrencySelect(allCurrencies);
                 button.disabled = false;
             }
-    
+
         }
     };
     request.open("GET", CURRENCIES_URL, true);
     request.send(null);
-    
+
 }
 
 loadAllCurrencies();
