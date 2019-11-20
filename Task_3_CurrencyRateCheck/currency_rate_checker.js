@@ -2,59 +2,59 @@ const CURRENCIES_URL = "http://www.nbrb.by/api/exrates/currencies";
 const CURRENCY_RATE_URL = "https://www.nbrb.by/API/ExRates/Rates/Dynamics";
 let allCurrencies = [];
 
-// Можно обойтись без этих глобальных переменных
-let startDate = "2019-9-2";
-let endDate = "2019-10-4";
-var queryCount = 0;
-var currencyRate = {};
-let currentCurrencies = [];
-// Не используется
-let currencyCount = 5;
+//function, which fetch availible currencies from api and fill select whit result
+function loadAllCurrencies() {
+    return new Promise(function (resolve, reject) {
+        let request = new XMLHttpRequest();
+        request.onreadystatechange = function () {
 
-function fillCurrencySelect(currencies) {
-    let currencySelect = document.getElementById('selected-currency');
-    for (let i = 0; i < currencies.length; i++) {
-        let optionElement = document.createElement('option');
-        optionElement.innerHTML = String(currencies[i].Cur_QuotName);
-        currencySelect.append(optionElement);
-    }
+            if (this.readyState === 4) {
+                if (this.status === 200) {
+                    allCurrencies = JSON.parse(this.responseText);
+                    allCurrencies = allCurrencies.filter(element => {
+                        return ((Date.parse(element.Cur_DateEnd) > (new Date())) && (element.Cur_Periodicity == 0))
+                    })
+                    //fillCurrencySelect(allCurrencies);
+                    resolve(allCurrencies);
+                } else
+                    reject("Error");
+            }
+        };
+
+        request.open("GET", CURRENCIES_URL, true);
+        request.send(null);
+    });
 }
 
-function loadCurrencyRate(currencyInfo, dateFrom, dateTo, currencyRageStorage, allQueryExecutedCallback) {
-    let request = new XMLHttpRequest();
-    request.onreadystatechange = function () {
+//function, which creates Promise whith a request to receive the currency rate
+function createLoadCurrencyRatePromise(currencyInfo, dateFrom, dateTo) {
+    return new Promise(function (resolve, reject) {
+        let request = new XMLHttpRequest();
+        request.onreadystatechange = function () {
 
-        if (this.readyState === 4) {
-            if (this.status === 200) {
-                let currencyValues;
-                try {
-                    currencyValues = JSON.parse(this.responseText);
-                } catch {
-                    currencyValues = [];
-                }
-                // Плохая практика изменять что-то в аргументах, если без этого можно обойтись.
-                // Попробуй использовать промисы и резолвить их в этим значением.
-                currencyRageStorage[currencyInfo.Cur_ID] = currencyValues;
+            if (this.readyState === 4) {
+                if (this.status === 200) {
+                    let currencyValues;
+                    try {
+                        currencyValues = JSON.parse(this.responseText);
+                    } catch {
+                        currencyValues = [];
+                    }
+                    resolve(currencyValues);
+                } else
+                    reject("Error");
             }
+        };
 
-            // Это выглядт как жесткий хак.
-            // Представь, что у тебя эта функция в отдельном модуле и может быть использована в разных ситуациях.
-            // Тогда ты не сможешь пользоваться глобальной переменной
-            queryCount--;
-            if (queryCount <= 0) {
-                allQueryExecutedCallback();
-            }
-        }
-    };
-
-    let currencyUrl = `${CURRENCY_RATE_URL}/${currencyInfo.Cur_ID}?startDate=${dateFrom}&endDate=${dateTo}`
-    request.open("GET", currencyUrl, true);
-    request.send(null);
+        let currencyUrl = `${CURRENCY_RATE_URL}/${currencyInfo.Cur_ID}?startDate=${dateFrom}&endDate=${dateTo}`
+        request.open("GET", currencyUrl, true);
+        request.send(null);
+    });
 }
 
-function updateSelectedCurrencies() {
-    // В Javascript принято писать "let selectedCurrencies = [];"
-    let selectedCurrencies = new Array();
+//function which fetchs and returns selected currency from users controls
+function getSelectedCurrencies() {
+    let selectedCurrencies = [];
 
     let selectElement = document.getElementById('selected-currency');
     for (let i = 0; i < selectElement.options.length; i++) {
@@ -63,47 +63,37 @@ function updateSelectedCurrencies() {
         }
     }
 
-    currentCurrencies = selectedCurrencies;
+    return selectedCurrencies;
 }
 
-function updateDatesRange() {
-    let dateRange;
-    try {
-        dateRange = processDate();
-    } catch (e) {
-        throw e;
-    }
-    startDate = dateRange.from;
-    endDate = dateRange.to;
-}
-
-function clearCurrenciesRateStorage() {
-    currencyRate = {};
-}
-
+//function, which fetch currency rate from api and after it, fill table
 function currenciesRateQuery() {
 
     let errorOutput = document.getElementById("errors-output");
     errorOutput.innerText = "";
+
+    let dateRange;
     try {
-        updateDatesRange();
+        dateRange = processDate();
     } catch (e) {
         errorOutput.innerText = e;
         return;
     }
 
-    clearCurrenciesRateStorage()
-    updateSelectedCurrencies();
+    from = dateRange.from;
+    to = dateRange.to;
+    let requested_currency = getSelectedCurrencies();
 
-    queryCount = currentCurrencies.length;
+    let requests = requested_currency.map(currencyInfo => createLoadCurrencyRatePromise(currencyInfo, from, to));
 
-    for (let i = 0; i < currentCurrencies.length; i++) {
-        // Попроуй промисы вместо коллбека, который вызывается по счетчику
-        loadCurrencyRate(currentCurrencies[i], startDate, endDate, currencyRate, fillTableCallback);
-    }
+    Promise.all(requests)
+        .then((currencyRate) => {
+            fillTableCallback(requested_currency, currencyRate, from, to);
+        })
 }
 
-function fillTableCallback() {
+//function which fill table with currentCurrencies columns and rows with dates from 'from' to 'to'
+function fillTableCallback(currentCurrencies, currencyRate, from, to) {
 
     let table = document.getElementById("currency-rate-table");
     table.innerHTML = "";
@@ -126,8 +116,8 @@ function fillTableCallback() {
 
     if (currentCurrencies.length > 0) {
 
-        let currDate = new Date(Date.parse(startDate));
-        let targetDate = new Date(Date.parse(endDate));
+        let currDate = new Date(Date.parse(from));
+        let targetDate = new Date(Date.parse(to));
 
         while (currDate <= targetDate) {
             let tableRow = document.createElement('tr');
@@ -139,11 +129,19 @@ function fillTableCallback() {
             for (let i = 0; i < currentCurrencies.length; i++) {
                 tabledata = document.createElement('td');
                 try {
-                    let temp = currencyRate[currentCurrencies[i].Cur_ID].filter(createDateFilterFunction(currDate));
-                    if (temp.length > 0)
-                        tabledata.innerText = temp[0].Cur_OfficialRate;
-                    else
+                    let tempCurrencyRate = currencyRate.filter(currencyArr => {
+                        return ((currencyArr.length > 0) && (currencyArr[0].Cur_ID == currentCurrencies[i].Cur_ID));
+                    });
+
+                    if (tempCurrencyRate.length > 0) {
+                        let temp = tempCurrencyRate[0].filter(createDateFilterFunction(currDate));
+                        if (temp.length > 0)
+                            tabledata.innerText = temp[0].Cur_OfficialRate;
+                        else
+                            tabledata.innerText = "none";
+                    } else
                         tabledata.innerText = "none";
+
                 } catch {
                     tabledata.innerText = "none";
                 }
@@ -157,11 +155,11 @@ function fillTableCallback() {
     }
 }
 
+//function which return filter function which return elements whith the same year,month and day
 function createDateFilterFunction(currDate) {
     return function (element) {
         let targetDate = new Date(Date.parse(currDate));
         let currentDate = new Date(Date.parse(element.Date));
-        // currentDate.toDateString() == targetDate.toDateString()
         if ((currentDate.getFullYear() == targetDate.getFullYear()) && (currentDate.getMonth() == targetDate.getMonth()) && (currentDate.getDate() == targetDate.getDate()))
             return true;
         else
@@ -169,34 +167,7 @@ function createDateFilterFunction(currDate) {
     }
 };
 
-function dateSelectInitialization(selectElement, dateType) {
-
-    switch (dateType) {
-        case "DAY":
-            for (let i = 1; i < 32; i++) {
-                let optionElement = document.createElement('option');
-                optionElement.innerHTML = String(i);
-                selectElement.append(optionElement);
-            }
-            break;
-        case "MONTH":
-            for (let i = 1; i < 13; i++) {
-                let optionElement = document.createElement('option');
-                optionElement.innerHTML = String(i);
-                selectElement.append(optionElement);
-            }
-            break;
-        case "YEAR":
-            var now = new Date();
-            for (let i = 2016; i <= now.getFullYear(); i++) {
-                let optionElement = document.createElement('option');
-                optionElement.innerHTML = String(i);
-                selectElement.append(optionElement);
-            }
-            break;
-    }
-}
-
+//function which fetch and return dates from users controls
 function processDate() {
     let fromDay = +(document.getElementById('from-date-day').value);
     let fromMonth = +(document.getElementById('from-date-month').value);
@@ -234,7 +205,6 @@ function processDate() {
         throw "Invalid date range.  Date range can not be more than 360 days. ";
     }
 
-    //"2019-9-2"
     formatedFromDate = `${fromDate.getFullYear()}-${fromDate.getMonth() + 1}-${fromDate.getDate()}`
     formatedToDate = `${toDate.getFullYear()}-${toDate.getMonth() + 1}-${toDate.getDate()}`
     return {
@@ -243,43 +213,50 @@ function processDate() {
     }
 }
 
-// Если тебе надо разделить куски кода, используй комментарий, а не 10 пустых строк
 
+//---------------------------------DOM elements initialization----------------------------------
 
+function fillCurrencySelect(currencies) {
+    let currencySelect = document.getElementById('selected-currency');
+    for (let i = 0; i < currencies.length; i++) {
+        let optionElement = document.createElement('option');
+        optionElement.innerHTML = String(currencies[i].Cur_QuotName);
+        currencySelect.append(optionElement);
+    }
+}
 
+function dateSelectInitialization(selectElement, dateType) {
 
-
-
-
-
-
-
+    switch (dateType) {
+        case "DAY":
+            for (let i = 1; i < 32; i++) {
+                let optionElement = document.createElement('option');
+                optionElement.innerHTML = String(i);
+                selectElement.append(optionElement);
+            }
+            break;
+        case "MONTH":
+            for (let i = 1; i < 13; i++) {
+                let optionElement = document.createElement('option');
+                optionElement.innerHTML = String(i);
+                selectElement.append(optionElement);
+            }
+            break;
+        case "YEAR":
+            var now = new Date();
+            for (let i = 2016; i <= now.getFullYear(); i++) {
+                let optionElement = document.createElement('option');
+                optionElement.innerHTML = String(i);
+                selectElement.append(optionElement);
+            }
+            break;
+    }
+}
 
 let button = document.getElementById("query-currency-rate-button");
 button.disabled = true;
 
-function loadAllCurrencies()
-{
-    let request = new XMLHttpRequest();
-    request.onreadystatechange = function () {
-        if (this.readyState === 4) {
-            if (this.status === 200) {
-                allCurrencies = JSON.parse(this.responseText);
-                allCurrencies = allCurrencies.filter(element => {
-                    return ((Date.parse(element.Cur_DateEnd) > (new Date()))&&(element.Cur_Periodicity == 0))
-                })
-                fillCurrencySelect(allCurrencies);
-                button.disabled = false;
-            }
-
-        }
-    };
-    request.open("GET", CURRENCIES_URL, true);
-    request.send(null);
-
-}
-
-loadAllCurrencies();
+loadAllCurrencies().then((allCurr) => {fillCurrencySelect(allCurr); button.disabled = false;})
 
 selectElement = document.getElementById('from-date-day');
 dateSelectInitialization(selectElement, "DAY");
@@ -299,4 +276,4 @@ dateSelectInitialization(selectElement, "MONTH");
 selectElement = document.getElementById('to-date-year');
 dateSelectInitialization(selectElement, "YEAR");
 
-button.addEventListener('click', currenciesRateQuery);
+button.addEventListener('click', currenciesRateQuery); //currenciesRateQuery()
