@@ -4,6 +4,8 @@ create database trading_network
 use trading_network
 
 --drop table Shops
+-- No need to duplicate 'shop_' in every field name.
+-- It's better to use 'id', not code
 create table Shops (shop_code int primary key, shop_name varchar(30),shop_address varchar(50))
 
 TRUNCATE TABLE  Shops;
@@ -169,7 +171,7 @@ create table ShopsOrders
 		(1,655)
 
 
-
+-- Same as Orders
 create table ProductsSale 
 	(product_code int not null,
 	 product_count int not null,
