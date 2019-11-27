@@ -1,32 +1,37 @@
 
-create database trading_network
+--create database trading_network
 
 use trading_network
 
---drop table Shops
--- No need to duplicate 'shop_' in every field name.
--- It's better to use 'id', not code
-create table Shops (shop_code int primary key, shop_name varchar(30),shop_address varchar(50))
+drop table OrdersProducts;
+drop table CustomerOrders;
+drop table ShopsProducts;
+drop table ShopsOrders;
+drop table Orders;
+drop table Shops;
+drop table Customers;
+drop table Products;
 
-TRUNCATE TABLE  Shops;
-INSERT INTO Shops
-           (shop_code
-           ,shop_name
-           ,shop_address)
+
+--drop table Shops
+create table Shops (id int primary key, name varchar(30),shop_address varchar(50));
+
+--TRUNCATE TABLE  Shops;
+INSERT INTO Shops (id, name, shop_address)
      VALUES
            (1,'evroopt','minsk, belarus'),
            (2,'5element','grodno'),
            (3,'ikea','new york')
 
 
-create table Products (product_code int primary key, product_name varchar(30),product_cost int)
+create table Products (id int primary key,name varchar(30),cost int)
 --drop table Products
 
 TRUNCATE TABLE  Products;
 INSERT INTO Products
-           (product_code
-           ,product_name
-           ,product_cost)
+           (id
+           ,name
+           ,cost)
      VALUES
            (1,'banana',10),
            (2,'knife',95),
@@ -37,35 +42,36 @@ INSERT INTO Products
            (8,'bicycle',1500)
 
 
-create table Orders (order_code int primary key, products_count int,order_date date, order_cost int)
+create table Orders (id int primary key, products_count int,order_date date,cost int)
 --drop table Orders
 
 
 TRUNCATE TABLE  Orders ;
 
 INSERT INTO Orders 
-           (order_code
+           (id
            ,products_count
            ,order_date
-           ,order_cost)
+           ,cost)
      VALUES
-        --  (1,5,'2015-12-13',150),
-        --  (2,1,'2015-01-5',30),
-        --  (3,10,'2016-03-25',240),
-        --  (4,7,'2015-01-17',180),
-        --(143,434,'2015-01-17',18000000),
-        (654,64,'2014-01-17',500000),
-        (655,345,'2014-06-01',500001)
+         (1,5,'2015-12-13',150),
+         (2,1,'2015-01-5',30),
+         (3,10,'2016-03-25',240),
+         (4,7,'2015-01-17',180),
+         (143,434,'2015-01-17',18000000),
+         (654,64,'2014-01-17',500000),
+         (655,345,'2014-06-01',500001),
+         (10,5,'2014-12-11',350)
 
 
 
-create table Customers (customer_code int primary key, customer_name varchar(30))
+create table Customers (id int primary key, name varchar(30))
 --drop table Customers
 
 TRUNCATE TABLE  Customers ;
 INSERT INTO Customers 
-           (customer_code
-           ,customer_name)
+           (id
+           ,name)
      VALUES
            (1,'Ilya'),
            (2,'Greg'),
@@ -73,22 +79,19 @@ INSERT INTO Customers
            (4,'Alex');
 
 
-
-
-
          
 create table ShopsProducts 
-	(shop_code int not null,
-	 product_code int not null,
-	 UNIQUE (shop_code , product_code),
-	 FOREIGN KEY (shop_code) REFERENCES Shops (shop_code),
-	 FOREIGN KEY (product_code ) REFERENCES Products (product_code))
+	(shop_id int not null,
+	 product_id int not null,
+	 UNIQUE (shop_id , product_id),
+	 FOREIGN KEY (shop_id) REFERENCES Shops (id),
+	 FOREIGN KEY (product_id ) REFERENCES Products (id))
 
 --drop table ShopsProducts
 
  INSERT INTO ShopsProducts 
-           (shop_code
-           ,product_code)
+           (shop_id
+           ,product_id)
      VALUES
            (1,1),
            (2,1),
@@ -100,67 +103,71 @@ create table ShopsProducts
 
 
 create table OrdersProducts 
-	(order_code int not null,
-	 product_code int not null,
-	 UNIQUE (order_code , product_code),
-	 FOREIGN KEY (order_code) REFERENCES Orders (order_code),
-	 FOREIGN KEY (product_code ) REFERENCES Products (product_code))
+	(order_id int not null,
+	 product_id int not null,
+	 product_count int not null,
+	 UNIQUE (order_id , product_id),
+	 FOREIGN KEY (order_id) REFERENCES Orders (id),
+	 FOREIGN KEY (product_id ) REFERENCES Products (id))
 
 
 --drop table OrdersProducts
 
  INSERT INTO OrdersProducts  
-           (order_code
-           ,product_code)
+           (order_id
+           ,product_id,
+           product_count)
      VALUES
-           (1,1),
-           (1,2),
-           (2,3),
-           (2,4),
-           (3,1),
-           (3,6),
-           (4,7),
-           (4,4)
+           (1,1,1),
+           (1,2,2),
+           (2,3,4),
+           (2,4,3),
+           (3,1,2),
+           (3,6,4),
+           (4,7,1),
+           (4,4,3),
+           (10,3,5)
+           
 
 
 
-create table UserOrders 
-	(order_code int not null,
-	 customer_code int not null,
-	 UNIQUE (order_code),
-	 FOREIGN KEY (order_code) REFERENCES Orders (order_code),
-	 FOREIGN KEY (customer_code ) REFERENCES Customers (customer_code))
+create table CustomerOrders 
+	(order_id int not null,
+	 customer_id int not null,
+	 UNIQUE (order_id),
+	 FOREIGN KEY (order_id) REFERENCES Orders (id),
+	 FOREIGN KEY (customer_id ) REFERENCES Customers (id))
 
---drop table UserOrders
+--drop table CustomerOrdersid
 
  
- INSERT INTO UserOrders 
-           (order_code
-           ,customer_code)
+ INSERT INTO CustomerOrders
+           (order_id
+           ,customer_id)
      VALUES
-         --  (1,1),
-         --  (2,2),
-         --  (3,3),
-         --  (4,4),
-         --(143,2),
-         --(654,3),
-         --(655,3)
+         (1,1),
+         (2,2),
+         (3,3),
+         (4,4),
+         (143,2),
+         (654,3),
+         (655,3)
 
 
 create table ShopsOrders 
-	(shop_code int not null,
-	 order_code int not null,
-	 UNIQUE (order_code),
-	 FOREIGN KEY (order_code) REFERENCES Orders (order_code),
-	 FOREIGN KEY (shop_code) REFERENCES Shops (shop_code))
+	(shop_id int not null,
+	 order_id int not null,
+	 UNIQUE (order_id),
+	 FOREIGN KEY (order_id) REFERENCES Orders (id),
+	 FOREIGN KEY (shop_id) REFERENCES Shops (id))
 
 
 --drop table ShopsOrders 
 
  
  INSERT INTO ShopsOrders  
-           (shop_code
-           ,order_code)
+           (shop_id
+           ,order_id)
      VALUES
 		(1,1),
 		(2,2),
@@ -169,28 +176,3 @@ create table ShopsOrders
 		(3,143),
 		(2,654),
 		(1,655)
-
-
--- Same as Orders
-create table ProductsSale 
-	(product_code int not null,
-	 product_count int not null,
-	 sale_date date)
-
-
---drop table ProductsSale  
-
-
- INSERT INTO ProductsSale  
-           (product_code
-            ,product_count
-            ,sale_date)
-     VALUES
-		(1,8,'2015-01-17'),
-		(2,5,'2015-01-03'),
-		(1,4,'2014-12-17'),
-		(3,5,'2014-12-28'),
-		(2,6,'2014-12-02'),
-		(4,7,'2016-01-21'),
-		(5,15,'2014-03-17')
-		
